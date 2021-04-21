@@ -1,0 +1,1 @@
+web: java $JAVA_OPTS -jar target/classes/* --port $PORT target/WebApp-1.0-SNAPSHOT.war
