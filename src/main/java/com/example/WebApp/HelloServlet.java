@@ -10,7 +10,7 @@ import javax.servlet.annotation.*;
 @WebServlet(name = "helloServlet", value = "/hello-servlet")
 public class HelloServlet extends HttpServlet {
     private String message;
-    private File file = new File("src/main/java/com/portal/repository");
+    private File file = new File("src/main/resources/files");
 
 
     public void init() {
