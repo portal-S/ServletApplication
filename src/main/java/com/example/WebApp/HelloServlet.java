@@ -10,7 +10,8 @@ import javax.servlet.annotation.*;
 @WebServlet(name = "helloServlet", value = "/hello-servlet")
 public class HelloServlet extends HttpServlet {
     private String message;
-    private File file = new File("src/main/resources/files");
+
+
 
 
     public void init() {
@@ -18,14 +19,19 @@ public class HelloServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String appPath = request.getServletContext().getRealPath("");
+        String path = appPath + "src\\main\\resources\\files";
+        File file = new File(path);
         response.setContentType("text/html");
-
         // Hello
         PrintWriter out = response.getWriter();
         out.println("<html><body>");
         out.println("<h1>" + file.listFiles() + "</h1>");
+        out.println("<h1>" + path + "</h1>");
         out.println("</body></html>");
     }
+
+
 
     public void destroy() {
     }
