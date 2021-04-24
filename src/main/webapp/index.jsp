@@ -2,12 +2,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSP - Hello World</title>
+    <title>FileUploadDemo</title>
 </head>
 <body>
-<h1><%= "Hello World!" %>
-</h1>
-<br/>
-<a href="hello-servlet">Hello Servlet</a>
+<h1>File Upload Demo</h1>
+<h3>Please, select file to upload</h3> <br/>
+<form action="files" method="post"
+      enctype="multipart/form-data">
+    <input type="file" name="file" size="100"/>
+    <br/>
+    <input type="submit" value="Upload File"/>
+</form>
 </body>
 </html>

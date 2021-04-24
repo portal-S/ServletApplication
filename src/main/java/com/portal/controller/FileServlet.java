@@ -53,6 +53,7 @@ public class FileServlet extends HttpServlet {
         upload.setSizeMax(100 * 1024);
 
         List fileItems = null;
+        File file1;
         try {
             fileItems = upload.parseRequest(req);
             Iterator iterator = fileItems.iterator();
@@ -63,14 +64,15 @@ public class FileServlet extends HttpServlet {
 
                     String fileName = fileItem.getName();
                     if (fileName.lastIndexOf("\\") >= 0) {
-                        file = new File(file.getAbsolutePath() +
+                        file1 = new File(file.getAbsolutePath() +
                                 fileName.substring(fileName.lastIndexOf("\\")));
                     } else {
-                        file = new File(file.getAbsolutePath() +
+                        file1 = new File(file.getAbsolutePath() +
                                 fileName.substring(fileName.lastIndexOf("\\") + 1));
                     }
-                        fileItem.write(file);
+                        fileItem.write(file1);
                 }
+                resp.getWriter().write("CREATED");
             }
         } catch (Exception e) {
             e.printStackTrace();
