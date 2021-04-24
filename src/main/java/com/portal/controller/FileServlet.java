@@ -22,9 +22,9 @@ public class FileServlet extends HttpServlet {
 
 
         if(file.exists()) resp.getWriter().write("EXIST");
-        for (File f : file.listFiles()){
+        /*for (File f : file.listFiles()){
             resp.getWriter().write(f.getName());
-        }
+        }*/
         Path currentRelativePath = Paths.get("");
         String s = currentRelativePath.toAbsolutePath().toString();
         resp.getWriter().write(getServletContext().getRealPath("/"));
