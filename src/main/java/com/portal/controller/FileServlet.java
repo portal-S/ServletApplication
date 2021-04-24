@@ -25,7 +25,8 @@ public class FileServlet extends HttpServlet {
         for (File f : file.listFiles()){
             resp.getWriter().write(f.getName());
         }
-        Path currentRelativePath = Paths.get("");
+        resp.getWriter().write("\n");
+        resp.getWriter().write(file.getAbsolutePath());
     }
 
     @Override
