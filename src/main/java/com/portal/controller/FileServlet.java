@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @WebServlet(urlPatterns = {"/files"})
-@MultipartConfig(location = "src/main/resources/files")
+@MultipartConfig(location = "/app/target/tomcat.34050/webapps/expanded/WEB-INF/classes/files/")
 public class FileServlet extends HttpServlet {
 
     @Override
@@ -26,8 +26,6 @@ public class FileServlet extends HttpServlet {
             resp.getWriter().write(f.getName());
         }
         Path currentRelativePath = Paths.get("");
-        String s = currentRelativePath.toAbsolutePath().toString();
-        resp.getWriter().write(getServletContext().getRealPath("/"));
     }
 
     @Override
