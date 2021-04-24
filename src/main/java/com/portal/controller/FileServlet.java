@@ -1,5 +1,10 @@
 package com.portal.controller;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +18,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Iterator;
+import java.util.List;
 
 @WebServlet(urlPatterns = {"/files"})
 public class FileServlet extends HttpServlet {
@@ -38,16 +45,38 @@ public class FileServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-      //  Part part = req.getPart("file");
-        for(Part p : req.getParts()){
-            resp.getWriter().write(p.getName());
+        DiskFileItemFactory diskFileItemFactory = new DiskFileItemFactory();
+        diskFileItemFactory.setRepository(file);
+        diskFileItemFactory.setSizeThreshold(100 * 1024);
+
+        ServletFileUpload upload = new ServletFileUpload(diskFileItemFactory);
+        upload.setSizeMax(100 * 1024);
+
+        List fileItems = null;
+        try {
+            fileItems = upload.parseRequest(req);
+            Iterator iterator = fileItems.iterator();
+
+            while (iterator.hasNext()) {
+                FileItem fileItem = (FileItem) iterator.next();
+                if (!fileItem.isFormField()) {
+
+                    String fileName = fileItem.getName();
+                    if (fileName.lastIndexOf("\\") >= 0) {
+                        file = new File(file.getAbsolutePath() +
+                                fileName.substring(fileName.lastIndexOf("\\")));
+                    } else {
+                        file = new File(file.getAbsolutePath() +
+                                fileName.substring(fileName.lastIndexOf("\\") + 1));
+                    }
+                        fileItem.write(file);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        /*File file1 = new File(this.file + "/" + part.getName());
-        file1.createNewFile();
-        FileOutputStream stream = new FileOutputStream(file1);
-        while (part.getInputStream().read() != -1){
-            stream.write(part.getInputStream().read());
-        }
-        stream.close();*/
+
+
+
     }
 }
