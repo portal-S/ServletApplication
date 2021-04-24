@@ -8,17 +8,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @WebServlet(urlPatterns = {"/files"})
-@MultipartConfig(location = "/app/target/tomcat.34050/webapps/expanded/WEB-INF/classes/files/")
 public class FileServlet extends HttpServlet {
+
+    private File file;
+
+    @Override
+    public void init() throws ServletException {
+        file = new File(getServletContext().getRealPath("/") + "/WEB-INF/classes/files/");
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        File file = new File(getServletContext().getRealPath("/") + "/WEB-INF/classes/files/");
 
 
         if(file.exists()) resp.getWriter().write("EXIST");
@@ -32,6 +39,12 @@ public class FileServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Part part = req.getPart("file");
-        part.write(part.getSubmittedFileName());
+        File file1 = new File(this.file + "/" + part.getName());
+        file1.createNewFile();
+        FileOutputStream stream = new FileOutputStream(file1);
+        while (part.getInputStream().read() != -1){
+            stream.write(part.getInputStream().read());
+        }
+        stream.close();
     }
 }
