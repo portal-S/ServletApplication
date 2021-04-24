@@ -18,7 +18,7 @@ public class FileServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        File file = new File(getServletContext().getRealPath("\\") + "\\WEB-INF\\classes\\files\\");
+        File file = new File(getServletContext().getRealPath("/") + "/WEB-INF/classes/files/");
 
 
         if(file.exists()) resp.getWriter().write("EXIST");
@@ -27,7 +27,7 @@ public class FileServlet extends HttpServlet {
         }
         Path currentRelativePath = Paths.get("");
         String s = currentRelativePath.toAbsolutePath().toString();
-        resp.getWriter().write(getServletContext().getRealPath("\\"));
+        resp.getWriter().write(getServletContext().getRealPath("/"));
     }
 
     @Override
