@@ -38,13 +38,16 @@ public class FileServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Part part = req.getPart("file");
-        File file1 = new File(this.file + "/" + part.getName());
+      //  Part part = req.getPart("file");
+        for(Part p : req.getParts()){
+            resp.getWriter().write(p.getName());
+        }
+        /*File file1 = new File(this.file + "/" + part.getName());
         file1.createNewFile();
         FileOutputStream stream = new FileOutputStream(file1);
         while (part.getInputStream().read() != -1){
             stream.write(part.getInputStream().read());
         }
-        stream.close();
+        stream.close();*/
     }
 }
