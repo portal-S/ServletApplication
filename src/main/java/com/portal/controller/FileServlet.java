@@ -29,6 +29,7 @@ public class FileServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         file = new File(getServletContext().getRealPath("/") + "/WEB-INF/classes/files/");
+        //file = new File(getServletContext().getRealPath("/") + "\\WEB-INF\\classes\\files\\");
     }
 
     @Override
@@ -64,15 +65,15 @@ public class FileServlet extends HttpServlet {
 
                     String fileName = fileItem.getName();
                     if (fileName.lastIndexOf("\\") >= 0) {
-                        file1 = new File(file.getAbsolutePath() +
+                        file1 = new File(file.getAbsolutePath() + "/" +
                                 fileName.substring(fileName.lastIndexOf("\\")));
                     } else {
-                        file1 = new File(file.getAbsolutePath() +
+                        file1 = new File(file.getAbsolutePath() + "/" +
                                 fileName.substring(fileName.lastIndexOf("\\") + 1));
                     }
                         fileItem.write(file1);
+                    resp.getWriter().write(file1.getAbsolutePath());
                 }
-                resp.getWriter().write("CREATED");
             }
         } catch (Exception e) {
             e.printStackTrace();
