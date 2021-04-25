@@ -28,8 +28,8 @@ public class FileServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-      //  file = new File(getServletContext().getRealPath("/") + "/WEB-INF/classes/files/");
-        file = new File(getServletContext().getRealPath("/") + "\\WEB-INF\\classes\\files\\");
+        file = new File(getServletContext().getRealPath("/") + "/WEB-INF/classes/files/");
+       // file = new File(getServletContext().getRealPath("/") + "\\WEB-INF\\classes\\files\\");
     }
 
     @Override
