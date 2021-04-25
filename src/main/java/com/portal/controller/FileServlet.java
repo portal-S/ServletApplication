@@ -20,25 +20,26 @@ import java.util.Iterator;
 import java.util.List;
 
 @WebServlet(urlPatterns = {"/files"})
-@MultipartConfig(location = "")
+@MultipartConfig()
 public class FileServlet extends HttpServlet {
 
     private File file;
-     static String F = "f";
+
+    private final String PATH = getServletContext().getRealPath("/" + "WEB-INF/classes/files" + File.separator);
 
     @Override
     public void init() throws ServletException {
-        file = new File(getServletContext().getRealPath("/") + "/WEB-INF/classes/files/");
+        file = new File(PATH);
        // file = new File(getServletContext().getRealPath("/") + "\\WEB-INF\\classes\\files\\");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-
         if(file.exists()) resp.getWriter().write("EXIST");
         for (File f : file.listFiles()){
             resp.getWriter().write(f.getName());
+            resp.getWriter().write("\n");
         }
         resp.getWriter().write("\n");
         resp.getWriter().write(file.getAbsolutePath());
@@ -48,10 +49,21 @@ public class FileServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Part part = req.getPart("file-name");
         String filename = part.getSubmittedFileName();
-        String path = getServletContext().getRealPath("/" + "WEB-INF/classes/files" + File.separator + filename);
+        String path = getServletContext().getRealPath(PATH + filename);
         read(part.getInputStream(), path);
         resp.getWriter().write(path);
         doGet(req, resp);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Writer writer = resp.getWriter();
+        writer.write(req.getParameter("file-delete-name"));
+        File file = new File(PATH + req.getParameter("file-delete-name"));
+        writer.write("\n");
+        if(file.exists()) writer.write("EXIST");
+        file.delete();
+        doGet(req,resp);
     }
 
     private void read(InputStream stream, String path){
