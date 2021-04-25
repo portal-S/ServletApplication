@@ -25,10 +25,11 @@ public class FileServlet extends HttpServlet {
 
     private File file;
 
-    private final String PATH = getServletContext().getRealPath("/" + "WEB-INF/classes/files" + File.separator);
+    private  String PATH;
 
     @Override
     public void init() throws ServletException {
+        PATH = getServletContext().getRealPath("/" + "WEB-INF/classes/files" + File.separator);
         file = new File(PATH);
        // file = new File(getServletContext().getRealPath("/") + "\\WEB-INF\\classes\\files\\");
     }
