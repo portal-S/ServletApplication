@@ -54,12 +54,6 @@ public class FileServlet extends HttpServlet {
         doGet(req, resp);
     }
 
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String s = req.getParameter("name");
-        resp.getWriter().write(s);
-    }
-
     private void read(InputStream stream, String path){
         try {
             byte[] bytes = new byte[stream.available()];
