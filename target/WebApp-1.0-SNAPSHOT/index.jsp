@@ -1,17 +1,22 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>FileUploadDemo</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
-<h1>File Upload Demo</h1>
-<h3>Please, select file to upload</h3> <br/>
-<form action="files" method="post"
-      enctype="multipart/form-data">
-    <input type="file" name="file" size="100"/>
-    <br/>
-    <input type="submit" value="Upload File"/>
+<h1>hello, servlets!</h1>
+<br/>
+<br/>
+<form method="post" action="/files" enctype="multipart/form-data">
+    <input type="text" name="author-name">
+    <input type="file" name="file-name">
+    <button>Send</button>
+</form>
+<br/>
+<form method="delete" action="/files" enctype="multipart/form-data">
+    <input type="text" name="name">
+    <button>Send</button>
 </form>
 </body>
 </html>

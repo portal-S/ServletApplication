@@ -12,24 +12,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
 
 @WebServlet(urlPatterns = {"/files"})
+@MultipartConfig(location = "")
 public class FileServlet extends HttpServlet {
 
     private File file;
+     static String F = "f";
 
     @Override
     public void init() throws ServletException {
-        file = new File(getServletContext().getRealPath("/") + "/WEB-INF/classes/files/");
-        //file = new File(getServletContext().getRealPath("/") + "\\WEB-INF\\classes\\files\\");
+      //  file = new File(getServletContext().getRealPath("/") + "/WEB-INF/classes/files/");
+        file = new File(getServletContext().getRealPath("/") + "\\WEB-INF\\classes\\files\\");
     }
 
     @Override
@@ -46,40 +46,31 @@ public class FileServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        DiskFileItemFactory diskFileItemFactory = new DiskFileItemFactory();
-        diskFileItemFactory.setRepository(file);
-        diskFileItemFactory.setSizeThreshold(100 * 1024);
+        Part part = req.getPart("file-name");
+        String filename = part.getSubmittedFileName();
+        String path = getServletContext().getRealPath("/" + "WEB-INF/classes/files" + File.separator + filename);
+        read(part.getInputStream(), path);
+        resp.getWriter().write(path);
+        doGet(req, resp);
+    }
 
-        ServletFileUpload upload = new ServletFileUpload(diskFileItemFactory);
-        upload.setSizeMax(100 * 1024);
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String s = req.getParameter("name");
+        resp.getWriter().write(s);
+    }
 
-        List fileItems = null;
-        File file1;
+    private void read(InputStream stream, String path){
         try {
-            fileItems = upload.parseRequest(req);
-            Iterator iterator = fileItems.iterator();
+            byte[] bytes = new byte[stream.available()];
+            stream.read();
+            FileOutputStream outputStream = new FileOutputStream(path);
+            outputStream.write(bytes);
+            outputStream.flush();
+            outputStream.close();
 
-            while (iterator.hasNext()) {
-                FileItem fileItem = (FileItem) iterator.next();
-                if (!fileItem.isFormField()) {
-
-                    String fileName = fileItem.getName();
-                    if (fileName.lastIndexOf("\\") >= 0) {
-                        file1 = new File(file.getAbsolutePath() + "/" +
-                                fileName.substring(fileName.lastIndexOf("\\")));
-                    } else {
-                        file1 = new File(file.getAbsolutePath() + "/" +
-                                fileName.substring(fileName.lastIndexOf("\\") + 1));
-                    }
-                        fileItem.write(file1);
-                    resp.getWriter().write(file1.getAbsolutePath());
-                }
-            }
-        } catch (Exception e) {
+        } catch (Exception e){
             e.printStackTrace();
         }
-
-
-
     }
 }
