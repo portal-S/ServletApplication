@@ -1,0 +1,3 @@
+com\portal\repository\interfaces\FileRepository.class
+com\portal\repository\FileRepositoryImpl.class
+com\portal\model\FileBD.class

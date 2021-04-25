@@ -14,9 +14,5 @@
     <button>Send</button>
 </form>
 <br/>
-<form method="delete" action="/files" enctype="multipart/form-data">
-    <input type="text" name="name">
-    <button>Send</button>
-</form>
 </body>
 </html>

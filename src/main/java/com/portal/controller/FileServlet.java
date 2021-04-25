@@ -1,5 +1,9 @@
 package com.portal.controller;
 
+import com.portal.repository.FileRepositoryImpl;
+import com.portal.repository.interfaces.FileRepository;
+import com.portal.service.FileService;
+import com.portal.utils.BDUtil;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -19,65 +23,60 @@ import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
 
-@WebServlet(urlPatterns = {"/files"})
+@WebServlet(urlPatterns = {"/files/*"})
 @MultipartConfig()
 public class FileServlet extends HttpServlet {
 
     private File file;
-
     private  String PATH;
+    private FileService service;
+
 
     @Override
     public void init() throws ServletException {
         PATH = getServletContext().getRealPath("/" + "WEB-INF/classes/files" + File.separator);
+        BDUtil.path = PATH;
         file = new File(PATH);
+        service = new FileService();
        // file = new File(getServletContext().getRealPath("/") + "\\WEB-INF\\classes\\files\\");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        if(file.exists()) resp.getWriter().write("EXIST");
-        for (File f : file.listFiles()){
-            resp.getWriter().write(f.getName());
-            resp.getWriter().write("\n");
+        String[] info = req.getRequestURI().split("/");
+        System.out.println(info[1]);
+        System.out.println(info.length);
+        if(info.length >= 3 && hasNumber(info[2])){
+            service.read(Integer.parseInt(info[2]), resp);
+            return;
         }
-        resp.getWriter().write("\n");
-        resp.getWriter().write(file.getAbsolutePath());
+        Writer writer = resp.getWriter();
+        writer.write("FILES INFO");
+        writer.write("\n");
+        service.readAll(resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Part part = req.getPart("file-name");
-        String filename = part.getSubmittedFileName();
-        String path = getServletContext().getRealPath(PATH + filename);
-        read(part.getInputStream(), path);
-        resp.getWriter().write(path);
+        service.create(part.getInputStream(), part.getSubmittedFileName());
         doGet(req, resp);
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Writer writer = resp.getWriter();
-        writer.write(req.getParameter("file-delete-name"));
-        File file = new File(PATH + req.getParameter("file-delete-name"));
-        writer.write("\n");
-        if(file.exists()) writer.write("EXIST");
-        file.delete();
-        doGet(req,resp);
+
+        service.delete(Integer.parseInt(req.getParameter("delete-file-id")));
+        resp.getWriter().write("DELETED");
     }
 
-    private void read(InputStream stream, String path){
+    private boolean hasNumber(String s){
         try {
-            byte[] bytes = new byte[stream.available()];
-            stream.read();
-            FileOutputStream outputStream = new FileOutputStream(path);
-            outputStream.write(bytes);
-            outputStream.flush();
-            outputStream.close();
-
-        } catch (Exception e){
-            e.printStackTrace();
+            Integer.valueOf(s);
+            return true;
+        }catch (NumberFormatException e){
+            return false;
         }
     }
+
 }
