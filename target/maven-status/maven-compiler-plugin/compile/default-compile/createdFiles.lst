@@ -1,5 +1,0 @@
-com\portal\repository\interfaces\FileRepository.class
-com\portal\controller\AccountServlet.class
-com\portal\repository\FileRepositoryImpl.class
-com\portal\repository\UserRepositoryImpl.class
-com\portal\model\FileBD.class
