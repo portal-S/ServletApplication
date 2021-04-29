@@ -1,27 +1,30 @@
+CREATE TABLE accounts
+(id integer NOT NULL AUTO_INCREMENT,
+ name varchar(25) NOT NULL,
+ password varchar(255) NOT NULL,
+ status varchar(55) NOT NULL DEFAULT 'USER',
+ PRIMARY KEY (id)
+);
+
+CREATE TABLE users
+(id integer NOT NULL AUTO_INCREMENT,
+ account_id integer NOT NULL,
+ PRIMARY KEY (id),
+ FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE
+);
+
 CREATE TABLE files
 (id integer NOT NULL AUTO_INCREMENT,
  name varchar(255) NOT NULL,
- PRIMARY KEY (id)
-);
-
-/*CREATE TABLE teams
-(id integer NOT NULL AUTO_INCREMENT,
- name varchar(55) NOT NULL,
- PRIMARY KEY (id)
-);
-
-CREATE TABLE developers
-(id integer NOT NULL AUTO_INCREMENT,
- firstName varchar(55) NOT NULL,
- lastName varchar(55) NOT NULL,
- team_id integer ,
+ user_id integer NOT NULL,
  PRIMARY KEY (id),
- FOREIGN KEY(team_id) REFERENCES teams(id) ON DELETE SET NULL
+ FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-create table skills_developers
-(skill_id integer not null,
- developer_id integer not null,
- FOREIGN KEY(developer_id) REFERENCES developers(id) ON DELETE CASCADE,
- FOREIGN KEY(skill_id) REFERENCES skills(id) ON DELETE CASCADE
-);*/
+CREATE TABLE events
+(id integer NOT NULL AUTO_INCREMENT,
+ action varchar(255) NOT NULL,
+ user_id integer NOT NULL,
+ PRIMARY KEY (id),
+ FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);

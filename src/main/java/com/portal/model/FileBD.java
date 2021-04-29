@@ -1,6 +1,7 @@
 package com.portal.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "files")
@@ -14,11 +15,22 @@ public class FileBD {
     @Column(name = "name")
     private String name;
 
-    public FileBD(String name) {
-        this.name = name;
-    }
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public FileBD() {
+    }
+
+    public FileBD(int id, String name, User user) {
+        this.id = id;
+        this.name = name;
+        this.user = user;
+    }
+
+    public FileBD(String name, User user) {
+        this.name = name;
+        this.user = user;
     }
 
     public int getId() {
@@ -35,5 +47,34 @@ public class FileBD {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "FileBD{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FileBD fileBD = (FileBD) o;
+        return id == fileBD.id && Objects.equals(name, fileBD.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
     }
 }

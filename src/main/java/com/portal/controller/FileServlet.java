@@ -38,36 +38,30 @@ public class FileServlet extends HttpServlet {
         BDUtil.path = PATH;
         file = new File(PATH);
         service = new FileService();
-       // file = new File(getServletContext().getRealPath("/") + "\\WEB-INF\\classes\\files\\");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String[] info = req.getRequestURI().split("/");
-        System.out.println(info[1]);
-        System.out.println(info.length);
-        if(info.length >= 3 && hasNumber(info[2])){
-            service.read(Integer.parseInt(info[2]), resp);
-            return;
-        }
-        Writer writer = resp.getWriter();
-        writer.write("FILES INFO");
-        writer.write("\n");
-        service.readAll(resp);
+        service.read(Integer.parseInt(req.getParameter("file-id")), resp, Integer.parseInt(req.getParameter("user-id")));
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Part part = req.getPart("file-name");
-        service.create(part.getInputStream(), part.getSubmittedFileName());
-        doGet(req, resp);
+        Part part = req.getPart("file");
+        service.create(part.getInputStream(), part.getSubmittedFileName(), Integer.parseInt(req.getParameter("user-id")));
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         service.delete(Integer.parseInt(req.getParameter("delete-file-id")));
         resp.getWriter().write("DELETED");
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Part part = req.getPart("file");
+        service.delete(Integer.parseInt(req.getParameter("delete-file-id")));
+        service.create(part.getInputStream(), part.getSubmittedFileName(), Integer.parseInt(req.getParameter("account-id")));
     }
 
     private boolean hasNumber(String s){

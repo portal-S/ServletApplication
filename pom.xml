@@ -23,11 +23,11 @@
                 <junit.version>5.7.0</junit.version>
                 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
                 <!-- Properties are prefixed with flyway. -->
-                <flyway.user>bestuser</flyway.user>
-                <flyway.password>bestuser</flyway.password>
-                <flyway.schemas>rest</flyway.schemas>
+                <flyway.user>s0cp6czbjwb493be</flyway.user>
+                <flyway.password>qfom6yu5utc0isru</flyway.password>
+                <flyway.schemas>tk8upvj3g7efvfpx</flyway.schemas>
                 <flyway.driver>com.mysql.jdbc.Driver</flyway.driver>
-                <flyway.url>jdbc:mysql://localhost/rest</flyway.url>
+                <flyway.url>jdbc:mysql://wcwimj6zu5aaddlj.cbetxkdyhwsb.us-east-1.rds.amazonaws.com/tk8upvj3g7efvfpx</flyway.url>
             </properties>
         </profile>
     </profiles>
@@ -102,13 +102,13 @@
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>4.0.1</version>
-                <configuration>
+                <!--<configuration>
                     <flyway.user>bestuser</flyway.user>
                     <flyway.password>bestuser</flyway.password>
                     <flyway.schemas>rest</flyway.schemas>
                     <flyway.driver>com.mysql.jdbc.Driver</flyway.driver>
                     <flyway.url>jdbc:mysql://localhost/rest</flyway.url>
-                </configuration>
+                </configuration>-->
             </plugin>
 
             <plugin>

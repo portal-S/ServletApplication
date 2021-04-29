@@ -10,11 +10,11 @@
             com.mysql.jdbc.Driver
         </property>
 
-        <property name="hibernate.connection.url">jdbc:mysql://localhost/rest</property>
+        <property name="hibernate.connection.url">jdbc:mysql://	wcwimj6zu5aaddlj.cbetxkdyhwsb.us-east-1.rds.amazonaws.com/tk8upvj3g7efvfpx</property>
 
-        <property name="hibernate.connection.username">bestuser</property>
+        <property name="hibernate.connection.username">s0cp6czbjwb493be</property>
 
-        <property name="hibernate.connection.password">bestuser</property>
+        <property name="hibernate.connection.password">qfom6yu5utc0isru</property>
 
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 

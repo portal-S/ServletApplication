@@ -1,5 +1,5 @@
 package com.portal.model;
 
 public enum AccountStatus {
-    USER,ADMIN
+    NOT_AUTHORIZED,ERROR_PASS,USER,ADMIN
 }

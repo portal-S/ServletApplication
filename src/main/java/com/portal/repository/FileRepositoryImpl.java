@@ -16,35 +16,49 @@ public class FileRepositoryImpl implements FileRepository {
 
 
     @Override
-    public List<File> readAll() {
-        return Arrays.asList(new File(BDUtil.path).listFiles());
+    public List<FileBD> readAll() {
+        Session session = BDUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        Query query = session.createQuery("from FileBD");
+        query.executeUpdate();
+        List<FileBD> fileBDList = query.getResultList();
+        session.getTransaction().commit();
+        session.close();
+        return fileBDList;
     }
 
     @Override
-    public File read(Integer integer) {
+    public FileBD read(Integer integer) {
         Session session = BDUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         FileBD fileBD = session.get(FileBD.class, integer);
-        File file = new File(BDUtil.path + "/" + fileBD.getName());
         session.getTransaction().commit();
         session.close();
-        return file;
+        return fileBD;
     }
 
     @Override
-    public File create(File file) {
+    public FileBD create(FileBD file) {
         Session session = BDUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
-        FileBD fileBD = new FileBD(file.getName());
-        session.save(fileBD);
+        session.save(file);
         session.getTransaction().commit();
         session.close();
         return file;
     }
 
     @Override
-    public File update(File file) {
-        return null;
+    public FileBD update(FileBD file) {
+        Session session = BDUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        FileBD fileBD = session.get(FileBD.class, file.getId());
+        fileBD.setName(file.getName());
+        session.getTransaction().commit();
+        session.close();
+        String path = BDUtil.path + "/" + file.getName();
+        File file1 = new File(path);
+        file1.delete();
+        return file;
     }
 
     @Override
@@ -52,14 +66,16 @@ public class FileRepositoryImpl implements FileRepository {
         Session session = BDUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         FileBD fileBD = session.get(FileBD.class, integer);
-        session.createQuery("DELETE from files where id = " + integer);
+        session.createQuery("DELETE from FileBD where id = " + integer).executeUpdate();
         session.getTransaction().commit();
         session.close();
+        System.out.println(fileBD.getName());
         String path = BDUtil.path + "/" + fileBD.getName();
         File file = new File(path);
         file.delete();
         return true;
     }
+
 
     public static int getMaxId(){
         Session session = BDUtil.getSessionFactory().getCurrentSession();
