@@ -30,6 +30,13 @@ public class Account {
         this.accountStatus = status;
     }
 
+    public Account(int id, String name, String password, AccountStatus status) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.accountStatus = status;
+    }
+
     public Account() {
     }
 

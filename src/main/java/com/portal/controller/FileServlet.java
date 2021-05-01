@@ -23,11 +23,10 @@ import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
 
-@WebServlet(urlPatterns = {"/files/*"})
+@WebServlet(urlPatterns = {"/api/v1/files"})
 @MultipartConfig()
 public class FileServlet extends HttpServlet {
 
-    private File file;
     private  String PATH;
     private FileService service;
 
@@ -36,7 +35,6 @@ public class FileServlet extends HttpServlet {
     public void init() throws ServletException {
         PATH = getServletContext().getRealPath("/" + "WEB-INF/classes/files" + File.separator);
         BDUtil.path = PATH;
-        file = new File(PATH);
         service = new FileService();
     }
 
@@ -62,15 +60,6 @@ public class FileServlet extends HttpServlet {
         Part part = req.getPart("file");
         service.delete(Integer.parseInt(req.getParameter("delete-file-id")));
         service.create(part.getInputStream(), part.getSubmittedFileName(), Integer.parseInt(req.getParameter("account-id")));
-    }
-
-    private boolean hasNumber(String s){
-        try {
-            Integer.valueOf(s);
-            return true;
-        }catch (NumberFormatException e){
-            return false;
-        }
     }
 
 }

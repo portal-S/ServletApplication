@@ -29,22 +29,17 @@ public class AccountService {
 
     public void create(String name, String pass, Writer writer) throws IOException {
         Account acc = new Account(name, pass, AccountStatus.USER);
-       // AccountStatus status = AccountRepositoryImpl.auth(acc);
-       // if(status == AccountStatus.NOT_AUTHORIZED){
-            //if(status != AccountStatus.ERROR_PASS){
-                Account account = repository.create(acc);
-                userService.create(account);
-                writer.write("DONE");
-          //  } else writer.write("ERROR: WRONG PASSWORD");
-    //    } else writer.write("ERROR: ACCOUNT ALREADY EXIST");
+        Account account = repository.create(acc);
+        userService.create(account);
     }
 
-    public void update(InputStream stream, String filename, int id) {
+    public void update(String name, int id, String pass) {
+        repository.update(new Account(id, name, pass, AccountStatus.USER));
 
     }
 
     public void delete(int id) {
-
+        repository.delete(id);
     }
 
     public Account read(int id) {
